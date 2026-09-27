@@ -1,0 +1,13 @@
+# Requires actual common-grid registration and predeclared treatment scenarios.
+extends: cache_safe.yaml
+rollout:
+  enabled: true
+  samples: 2
+  steps: 4
+  every: 4
+  require_registered: true
+  require_verified_intervals: true
+  require_verified_treatment: true
+loss:
+  composition: 0.1
+  rollout_anchor: 0.1

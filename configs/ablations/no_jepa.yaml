@@ -1,0 +1,3 @@
+extends: ../cache_safe.yaml
+loss:
+  jepa: 0.0

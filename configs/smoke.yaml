@@ -1,0 +1,47 @@
+schema: symm_world_v2
+encoder:
+  stem_width: 16
+  widths: [16, 32]
+  depths: [2, 2]
+  heads: [2, 4]
+  window: [2, 2, 2]
+  token_grid: [1, 2, 2]
+  dim: 32
+  query_heads: 4
+  anatomy_tokens: 2
+  disease_tokens: 2
+  predictor_depth: 2
+  phase_mixer_depth: 2
+  checkpoint_blocks: true
+velocity:
+  backend: native
+  channels: [16, 32]
+  num_res_blocks: 2
+  attention_heads: 4
+  checkpoint_blocks: true
+training:
+  device: cpu
+  precision: fp32
+  accumulation: 1
+  representation_steps: 3
+  flow_steps: 3
+  rollout_steps: 2
+  lr: 0.001
+  representation_lr: 0.001
+  warmup_steps: 1
+  auxiliary_warmup: 0
+  auxiliary_every: 1
+  log_every: 1
+  checkpoint_every: 1
+  validate_every: 2
+  validation_pairs: 1
+  cpu_threads: 2
+rollout:
+  enabled: true
+  samples: 2
+  steps: 1
+  every: 1
+sampling:
+  steps: 2
+  method: euler
+  samples: 2

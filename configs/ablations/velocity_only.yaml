@@ -1,0 +1,11 @@
+extends: ../cache_safe.yaml
+velocity:
+  source_tokens: false
+  use_predictive_prior: false
+loss:
+  semantic_endpoint: 0.0
+  local_map: 0.0
+  kinetics: 0.0
+  segmentation: 0.0
+  biomarker: 0.0
+  decoded_kinetics: 0.0

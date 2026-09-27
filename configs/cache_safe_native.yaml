@@ -1,0 +1,4 @@
+# Full bundled architecture; no MONAI dependency. Not claimed identical to MONAI.
+extends: cache_safe.yaml
+velocity:
+  backend: native

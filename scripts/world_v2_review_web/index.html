@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>World V2 MRI Review</title><link rel="stylesheet" href="viewer.css"></head>
+<body>
+<header><div><h1>World V2 <span>MRI Review</span></h1><p>EMA 4000 / Heun25 / 30 patients / 3 phases</p></div><nav><a href="../../architecture.md">Architecture</a><a href="report.md">Review report</a><a href="../../pcr/evaluation/index.html">pCR results</a></nav></header>
+<main>
+<div class="toolbar">
+<div class="case-control"><button id="prev" title="Previous patient" aria-label="Previous patient"><i data-lucide="chevron-left"></i></button><select id="case" aria-label="Patient"></select><button id="next" title="Next patient" aria-label="Next patient"><i data-lucide="chevron-right"></i></button></div>
+<div id="phases" class="segmented" role="group" aria-label="MRI phase"><button data-phase="0">Precontrast</button><button data-phase="1" class="active">First-post</button><button data-phase="2">Late</button></div>
+<select id="channel" aria-label="Image channel"><option value="raw">MRI intensity</option><option value="early">First-post minus pre</option><option value="late">Late minus pre</option></select>
+<label class="check"><input id="mask" type="checkbox" checked>Fixed T0 contour</label>
+<button id="download" title="Download comparison" aria-label="Download comparison"><i data-lucide="download"></i></button>
+</div>
+<div class="status"><span id="case-info"></span><span id="status" role="status">Loading</span></div>
+<section id="comparison" class="comparison" aria-label="MRI comparisons"></section>
+<div class="slice-controls"><span>Axial</span><input id="slice" type="range" min="0" max="31" value="16" aria-label="Axial slice"><output id="slice-value">16 / 31</output><button id="anchor" title="Return to largest T0 region" aria-label="Return to largest T0 region"><i data-lucide="locate-fixed"></i></button><label>Zoom <input id="zoom" type="range" min="1" max="3" step="0.25" value="1" aria-label="Image zoom"></label></div>
+<div class="section-title"><h2>Axial neighbors</h2><select id="neighbor-method" aria-label="Neighbor volume"><option value="mean">World V2 mean of 4</option><option value="sample1">World V2 draw 1</option><option value="sample2">World V2 draw 2</option><option value="sample3">World V2 draw 3</option><option value="sample4">World V2 draw 4</option><option value="target">True follow-up</option><option value="source">Observed source</option></select></div>
+<section id="neighbors" class="neighbors" aria-label="Twenty neighboring slices"></section>
+<div class="section-title"><h2>Patient comparisons</h2><a id="case-png" href="#">Three phases</a><a id="enhancement-png" href="#">Phase differences</a><a id="volume-link" href="#">Original arrays</a></div>
+<section id="patient-grid" class="patient-grid" aria-label="All thirty patients"></section>
+<div class="section-title"><h2>Image error</h2><a href="case_metrics.csv">Patient metrics</a><a href="metric_summary.csv">Summary CSV</a></div><img class="metrics" src="metrics.png" alt="MRI error in common foreground and fixed T0 region for three phases">
+</main><footer>Historical validation cohort · Fixed T0 predicted region · True follow-up VQ is a target-informed diagnostic</footer>
+<dialog id="image-dialog"><button id="close-dialog" title="Close image" aria-label="Close image"><i data-lucide="x"></i></button><h2 id="dialog-title"></h2><canvas id="dialog-canvas" width="768" height="768"></canvas></dialog>
+<script src="lucide.min.js"></script><script src="manifest.js"></script><script src="viewer.js"></script>
+</body></html>

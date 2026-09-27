@@ -1,0 +1,41 @@
+# New V2 weights on the existing reduced, registered three-phase cache.
+extends: cache_safe.yaml
+encoder:
+  checkpoint_blocks: false
+velocity:
+  backend: monai
+  checkpoint_blocks: false
+training:
+  seed: 20260919
+  device: cuda
+  precision: bf16
+  batch_size: 8
+  stage_batches:
+    representation: 256
+    flow: 80
+  accumulation: 1
+  reference_batch_size: 8
+  representation_steps: 20000
+  flow_steps: 60000
+  lr: 0.0001
+  representation_lr: 0.0001
+  warmup_steps: 1000
+  ema_decay: 0.999
+  log_every: 10
+  checkpoint_every: 2000
+  validate_every: 1000
+  validation_pairs: 102
+  auxiliary_every: 4
+  auxiliary_warmup: 2000
+  cpu_threads: 4
+  preload_latents: true
+  strict_determinism: false
+rollout:
+  enabled: false
+loss:
+  kinetics: 0.0
+  segmentation: 0.0
+  biomarker: 0.0
+  pcr: 0.05
+  external_teacher: 0.0
+  decoded_kinetics: 0.0

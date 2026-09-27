@@ -1,0 +1,4 @@
+# Requires actual locally exported teacher features for training patients.
+extends: cache_safe.yaml
+loss:
+  external_teacher: 0.1

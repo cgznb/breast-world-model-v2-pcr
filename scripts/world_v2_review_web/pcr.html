@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>World V2 | V1/V4 pCR</title><link rel="stylesheet" href="../../review/web/viewer.css">
+<style>.table-wrap{overflow-x:auto;margin:18px 0;border-top:1px solid #cbd1cf;border-bottom:1px solid #cbd1cf}table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:14px;font-variant-numeric:tabular-nums}th,td{padding:13px 15px;text-align:right;border-bottom:1px solid #e2e5e3}th:first-child,td:first-child{text-align:left}th{font-size:12px;color:#59625c;background:#edf1ee}tbody tr:nth-child(even){background:white}.facts{font-size:12px;color:#626d65;margin:18px 0;line-height:1.8}.toolbar label{display:flex;align-items:center;gap:8px}.results-plot{display:block;width:100%;max-width:1400px;margin:18px 0}#metric-label{font-size:18px;margin-top:22px}.download-links{display:flex;flex-wrap:wrap;gap:15px;margin:15px 0}#model-name{font-weight:bold}.notice{font-size:12px;padding:9px 0;color:#9a4c32;border-bottom:1px solid #deded8}@media(max-width:550px){th,td{padding:11px}.toolbar label{font-size:12px}.toolbar select{font-size:12px}.table-wrap{max-width:100%}}
+</style></head><body>
+<header><div><h1>World V2 <span>V1/V4 pCR</span></h1><p>102 historical patients / 32 pCR-positive / frozen 300-epoch, patience-50 classifiers</p></div><nav><a href="../../architecture.md">Architecture</a><a href="../../review/web/index.html">30 MRI cases</a><a href="report.md">Full report</a></nav></header>
+<main><div class="notice">Historical test cohort overlaps generator validation and checkpoint selection.</div><div class="facts">Generator: EMA step 4000 · Heun25 · Four probability draws per classifier · Seeds 42-51</div>
+<div class="toolbar"><div class="segmented" id="versions" role="group" aria-label="Classifier version"><button data-model="v1" class="active">V1</button><button data-model="v4">V4</button></div><label>Window <select id="window" aria-label="Temporal window"><option value="1">T0</option><option value="2">T0-T1</option><option value="3">T0-T2</option><option value="4" selected>T0-T3</option></select></label><label>Statistic <select id="statistic" aria-label="Statistic"><option value="mean">Mean of five model metrics</option><option value="ensemble">Five-model probability ensemble</option><option value="0">Fold 1 model</option><option value="1">Fold 2 model</option><option value="2">Fold 3 model</option><option value="3">Fold 4 model</option><option value="4">Fold 5 model</option></select></label><label>Metric <select id="metric" aria-label="Metric"><option value="auroc">AUROC</option><option value="ap">Average precision</option><option value="brier">Brier score</option><option value="logloss">Log loss</option><option value="sensitivity">Sensitivity</option><option value="specificity">Specificity</option><option value="accuracy">Accuracy</option><option value="f1">F1</option></select></label></div>
+<h2 id="metric-label"></h2><div class="table-wrap"><table id="scores"><thead><tr><th>Seed</th><th>Real MRI</th><th>Copy T0</th><th>World direct</th><th>World rollout</th><th>World previous-real</th></tr></thead><tbody></tbody></table></div>
+<div class="facts" id="table-note"></div><div class="download-links"><a href="pcr_world_v2_v1_v4.xlsx">Excel workbook</a><a href="seed_summary.csv">All seed summaries</a><a href="fold_metrics.csv">All fold metrics</a><a href="paired_t3_intervals.csv">Paired T3 intervals</a><a href="world_v2_vs_old_generator.csv">Previous generator comparison</a></div>
+<img class="results-plot" src="t3_auc_by_seed.png" alt="V1 and V4 T3 AUC by seed under five input policies and two aggregation methods"><img class="results-plot" src="v1_windows.png" alt="V1 test AUC across four temporal windows and all ten seeds">
+<div class="facts">Retained contiguous visits: T0 102, T1 100, T2 92, T3 84. All metrics use the same 102 patients, with unavailable visits masked.<br>Real: observed visits. Direct: T0 predicts each future visit. Rollout: each generated visit predicts the next. Previous-real: the observed preceding visit predicts the next.<br>Sensitivity, specificity, accuracy and F1 use a fixed threshold of 0.5.</div>
+</main><footer>250 frozen classifiers · No classifier updates · No seed selection · No historical-label threshold tuning</footer>
+<script src="results.js"></script><script>
+"use strict";
+const sources=["real","copy_T0","direct_mc4","rollout_mc4","previous_real_mc4"];
+let model="v1";
+const element=id=>document.getElementById(id);
+function render(){
+ const depth=Number(element("window").value),statistic=element("statistic").value,metric=element("metric").value;
+ const records=statistic==="mean"?PCR_RESULTS.summary:statistic==="ensemble"?PCR_RESULTS.ensemble:PCR_RESULTS.folds;
+ const rows=records.filter(r=>r.model===model&&r.depth===depth&&(statistic==="mean"||statistic==="ensemble"||r.outer===Number(statistic)));
+ const tbody=element("scores").querySelector("tbody");tbody.replaceChildren();
+ for(let seed=42;seed<=51;seed++){
+  const tr=document.createElement("tr"),label=document.createElement("td");label.textContent=String(seed);tr.append(label);
+  for(const source of sources){const row=rows.find(r=>r.seed===seed&&r.source===source),td=document.createElement("td");if(!row)throw new Error("Missing score");td.textContent=statistic==="mean"?row[metric+"_mean"].toFixed(4)+" +/- "+row[metric+"_fold_sd"].toFixed(4):row[metric].toFixed(4);tr.append(td);}
+  tbody.append(tr);
+ }
+ element("metric-label").textContent=model.toUpperCase()+" | "+element("window").selectedOptions[0].textContent+" | "+element("metric").selectedOptions[0].textContent;
+ element("table-note").textContent=statistic==="mean"?"Values are the mean +/- sample SD of five models evaluated on the same historical patients.":statistic==="ensemble"?"Metrics from the average of five classifier probabilities, after four-draw averaging inside each classifier.":"One frozen fold model evaluated on the same historical patients; generated inputs use four-draw probability averages.";
+}
+element("versions").addEventListener("click",event=>{const button=event.target.closest("[data-model]");if(!button)return;model=button.dataset.model;document.querySelectorAll("[data-model]").forEach(b=>b.classList.toggle("active",b===button));for(const option of element("window").options)option.disabled=model==="v4"&&option.value!=="4";if(model==="v4")element("window").value="4";render();});
+for(const id of ["window","statistic","metric"])element(id).addEventListener("change",render);
+render();
+</script></body></html>

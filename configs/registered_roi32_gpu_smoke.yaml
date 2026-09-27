@@ -1,0 +1,16 @@
+extends: registered_roi32_5090.yaml
+training:
+  reference_batch_size: 0
+  representation_steps: 3
+  flow_steps: 3
+  warmup_steps: 1
+  auxiliary_warmup: 0
+  auxiliary_every: 1
+  validation_pairs: 2
+  validate_every: 3
+  checkpoint_every: 3
+  log_every: 1
+sampling:
+  samples: 2
+  steps: 2
+  method: heun

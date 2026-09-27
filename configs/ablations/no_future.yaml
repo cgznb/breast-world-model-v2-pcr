@@ -1,0 +1,5 @@
+extends: ../cache_safe.yaml
+velocity:
+  use_predictive_prior: false
+loss:
+  future: 0.0

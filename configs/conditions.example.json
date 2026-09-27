@@ -1,0 +1,12 @@
+{
+  "stage_i": "T0",
+  "stage_j": "T1",
+  "treatment_arm": "REPLACE_WITH_TRAINING_VOCABULARY_VALUE",
+  "age": 50,
+  "hr_status": "positive",
+  "her2_status": "negative",
+  "mammaprint": "high",
+  "delta_days": null,
+  "interval_verified": false,
+  "action_segments": []
+}

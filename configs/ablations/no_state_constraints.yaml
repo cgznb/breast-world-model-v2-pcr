@@ -1,0 +1,9 @@
+extends: ../cache_safe.yaml
+loss:
+  anatomy: 0.0
+  separation: 0.0
+  latent_delta: 0.0
+  kinetics: 0.0
+  segmentation: 0.0
+  biomarker: 0.0
+  pcr: 0.0

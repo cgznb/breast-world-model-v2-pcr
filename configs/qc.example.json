@@ -1,0 +1,20 @@
+{
+  "_instructions": "Replace IDs with actual view/pair IDs. True means independently verified, not merely assumed. This example intentionally enables nothing.",
+  "views": {
+    "REPLACE_VIEW_ID": {
+      "source_available_grid": false,
+      "labels": {"pcr": null, "biomarkers": [null, null, null, null]}
+    }
+  },
+  "pairs": {
+    "REPLACE_PAIR_ID": {
+      "registered": false,
+      "anatomy_comparable": false,
+      "treatment_verified": false,
+      "scenario_id": null,
+      "plan_known_at_initial_source": false,
+      "qc_weight": 1.0,
+      "conditions": {"interval_verified": false, "delta_days": null, "action_segments": []}
+    }
+  }
+}

@@ -1,0 +1,48 @@
+# Native three-phase cache: keep source VQ coordinates and old frozen decoder.
+# No unverified spatial composition. Add measured sidecars before starting A.
+schema: symm_world_v2
+encoder:
+  stem_width: 48
+  widths: [96, 192, 384]
+  depths: [2, 2, 4]
+  heads: [3, 6, 12]
+  window: [2, 4, 4]
+  token_grid: [2, 4, 4]
+  dim: 192
+  query_heads: 6
+  anatomy_tokens: 4
+  disease_tokens: 8
+  predictor_depth: 4
+  phase_mixer_depth: 2
+  checkpoint_blocks: true
+velocity:
+  backend: monai
+  channels: [128, 256, 384]
+  num_res_blocks: 2
+  attention_heads: 8
+  checkpoint_blocks: true
+training:
+  device: cuda
+  precision: bf16
+  batch_size: 1
+  accumulation: 8
+  representation_steps: 20000
+  flow_steps: 60000
+  rollout_steps: 10000
+  lr: 0.0001
+  representation_lr: 0.0001
+  auxiliary_every: 4
+  auxiliary_warmup: 2000
+  validation_pairs: 16
+rollout:
+  enabled: false
+  require_registered: true
+  require_verified_intervals: true
+  require_verified_treatment: true
+loss:
+  external_teacher: 0.0
+  decoded_kinetics: 0.0
+sampling:
+  samples: 4
+  steps: 20
+  method: heun

@@ -1,0 +1,18 @@
+extends: cache_safe.yaml
+encoder:
+  checkpoint_blocks: false
+velocity:
+  checkpoint_blocks: false
+training:
+  batch_size: 8
+  accumulation: 1
+  cpu_threads: 4
+  preload_latents: true
+  strict_determinism: false
+  validation_pairs: 102
+  log_every: 10
+  checkpoint_every: 100
+loss:
+  kinetics: 0.0
+  segmentation: 0.0
+  biomarker: 0.0

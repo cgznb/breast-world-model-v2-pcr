@@ -1,0 +1,13 @@
+# ROI32 version of no_state_constraints.yaml. Train in a fresh output directory.
+# Zero weights remove optimization terms; the runtime still logs their values.
+extends: ../registered_roi32_5090.yaml
+loss:
+  reconstruction: 1.0
+  jepa: 1.0
+  future: 0.25
+  variance: 0.1
+  covariance: 0.01
+  latent_delta: 0.0
+  anatomy: 0.0
+  separation: 0.0
+  pcr: 0.0

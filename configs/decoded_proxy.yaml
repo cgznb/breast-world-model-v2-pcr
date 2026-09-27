@@ -1,0 +1,5 @@
+# Additional differentiable VQ decoding; matching --codec is mandatory.
+# This is CODEC reconstruction consistency, not measured PE/SER physiology.
+extends: cache_safe.yaml
+loss:
+  decoded_kinetics: 0.02
